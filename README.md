@@ -69,3 +69,4 @@ Project Link: [https://github.com/clnbs/karateChop](https://github.com/clnbs/kar
 
 * [Code Kata](http://codekata.com/)
 * [Cycloid.io](https://www.cycloid.io/)
+* [mieliestronk.com - word list](http://www.mieliestronk.com/)
