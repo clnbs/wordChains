@@ -2,8 +2,9 @@ package wordchainsresolver
 
 import (
 	"errors"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 type MockFactory struct {
@@ -17,19 +18,19 @@ type MockBadFactory struct {
 }
 
 func (badFactory *MockBadFactory) LoadDB() ([]string, error) {
-	return nil, errors.New("I am a bad factory, Muahahahaha!")
+	return nil, errors.New("from mock : I am a bad factory, Muahahahaha!")
 }
 
-type MockAlgorithm struct {
+type MockSolver struct {
 }
 
-func (algo *MockAlgorithm) FindWordChains(string, string, []string) ([]string, error) {
+func (solver *MockSolver) FindWordChains(string, string, []string) ([]string, error) {
 	return []string{"cat", "cot", "cog", "dog"}, nil
 }
 
-func GeneralWordChainsResolverTest(algo Algorithm, factory Factory, t *testing.T) {
+func GeneralWordChainsResolverTest(solver Solver, factory Factory, t *testing.T) {
 	expectedResult := []string{"cat", "cot", "cog", "dog"}
-	wcr := NewWordChainsResolver(algo, factory)
+	wcr := NewWordChainsResolver(solver, factory)
 	err := wcr.LoadDB()
 	assert.Nil(t, err)
 	result, err := wcr.Solve("cat", "dog")
@@ -38,25 +39,25 @@ func GeneralWordChainsResolverTest(algo Algorithm, factory Factory, t *testing.T
 }
 
 func TestNewWordChainsResolver(t *testing.T) {
-	algo := &MockAlgorithm{}
+	solver := &MockSolver{}
 	factory := &MockFactory{}
-	wcr := NewWordChainsResolver(algo, factory)
-	assert.Equal(t, wcr.algorithm, algo)
+	wcr := NewWordChainsResolver(solver, factory)
+	assert.Equal(t, wcr.solver, solver)
 	assert.Equal(t, wcr.factory, factory)
 }
 
 func TestWordChainsResolver_LoadDB(t *testing.T) {
 	expectedResult := []string{"cat", "cot", "cog", "dog"}
-	wcr := NewWordChainsResolver(&MockAlgorithm{}, &MockFactory{})
+	wcr := NewWordChainsResolver(&MockSolver{}, &MockFactory{})
 	err := wcr.LoadDB()
 	assert.Nil(t, err)
 	assert.Equal(t, expectedResult, wcr.wordList)
 
-	wcr = NewWordChainsResolver(&MockAlgorithm{}, &MockBadFactory{})
+	wcr = NewWordChainsResolver(&MockSolver{}, &MockBadFactory{})
 	err = wcr.LoadDB()
 	assert.NotNil(t, err)
 }
 
 func TestWordChainsResolver_Solve(t *testing.T) {
-	GeneralWordChainsResolverTest(&MockAlgorithm{}, &MockFactory{}, t)
+	GeneralWordChainsResolverTest(&MockSolver{}, &MockFactory{}, t)
 }

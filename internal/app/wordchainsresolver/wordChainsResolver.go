@@ -5,22 +5,22 @@ type Factory interface {
 	LoadDB() ([]string, error)
 }
 
-// Algorithm handle calculus part of the word chains problem
-type Algorithm interface {
+// Solver handle calculus part of the word chains problem
+type Solver interface {
 	FindWordChains(string, string, []string) ([]string, error)
 }
 
-// WordChainsResolver wrap Algorithm and Factory interfaces by holding
+// WordChainsResolver wrap Solver and Factory interfaces by holding
 // the word lis to process
 type WordChainsResolver struct {
-	algorithm Algorithm
-	factory   Factory
-	wordList  []string
+	solver   Solver
+	factory  Factory
+	wordList []string
 }
 
 // NewWordChainsResolver WordChainsResolver struct constructor
-func NewWordChainsResolver(algo Algorithm, factory Factory) *WordChainsResolver {
-	return &WordChainsResolver{algorithm: algo, factory: factory}
+func NewWordChainsResolver(solver Solver, factory Factory) *WordChainsResolver {
+	return &WordChainsResolver{solver: solver, factory: factory}
 }
 
 // LoadDB Factory wrapper
@@ -33,7 +33,7 @@ func (wcr *WordChainsResolver) LoadDB() error {
 	return nil
 }
 
-// Solve Algorithm wrapper
+// Solve Solver wrapper
 func (wcr *WordChainsResolver) Solve(from, to string) ([]string, error) {
-	return wcr.algorithm.FindWordChains(from, to, wcr.wordList)
+	return wcr.solver.FindWordChains(from, to, wcr.wordList)
 }
