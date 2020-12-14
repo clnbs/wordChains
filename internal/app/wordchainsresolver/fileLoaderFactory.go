@@ -5,14 +5,17 @@ import (
 	"os"
 )
 
+//FileLoaderFactory struct implements Factory interface
 type FileLoaderFactory struct {
 	path string
 }
 
+// NewFileLoaderFactory is a FileLoaderFactory constructor
 func NewFileLoaderFactory(path string) *FileLoaderFactory {
 	return &FileLoaderFactory{path: path}
 }
 
+// LoadDB implement Factory interface. It read a file containing a word per line
 func (fileLoader *FileLoaderFactory) LoadDB() ([]string, error) {
 	var wordList []string
 	file, err := os.Open(fileLoader.path)
