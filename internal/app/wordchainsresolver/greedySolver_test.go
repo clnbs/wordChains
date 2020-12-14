@@ -68,18 +68,18 @@ func TestFlipStringSlice(t *testing.T) {
 
 func TestGetNodeDepth(t *testing.T) {
 	head := NewWordTreeElement("test", 0, nil)
-	leaf := NewWordTreeElement("test_depth_2", 0, head)
+	node := NewWordTreeElement("test_depth_2", 0, head)
 	expectedHeadDepth := 1
-	expectedLeafDepth := 2
+	expectedNodeDepth := 2
 	assert.Equal(t, expectedHeadDepth, getNodeDepth(head))
-	assert.Equal(t, expectedLeafDepth, getNodeDepth(leaf))
+	assert.Equal(t, expectedNodeDepth, getNodeDepth(node))
 }
 
-func TestExtractSolutionFromLeaf(t *testing.T) {
+func TestExtractSolutionFromNode(t *testing.T) {
 	head := NewWordTreeElement("test", 0, nil)
-	leaf := NewWordTreeElement("test_depth_2", 0, head)
+	node := NewWordTreeElement("test_depth_2", 0, head)
 	expected := []string{"test", "test_depth_2"}
-	assert.Equal(t, expected, extractSolutionFromLeaf(leaf))
+	assert.Equal(t, expected, extractSolutionFromNode(node))
 }
 
 func TestIsWordInList(t *testing.T) {

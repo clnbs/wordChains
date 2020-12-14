@@ -35,7 +35,7 @@ type GreedySolver struct {
 	to                   string
 	usefulWords          []string
 	wordTree             *WordTreeNode
-	matchingWordLeaf     []*WordTreeNode
+	matchingWordNode     []*WordTreeNode
 	solutionFoundAtDepth int
 	maxDepth             int
 }
@@ -55,7 +55,7 @@ func NewGreedySolverWithParams(from string, to string, wordList []string) *Greed
 		to:                   to,
 		usefulWords:          nil,
 		wordTree:             nil,
-		matchingWordLeaf:     nil,
+		matchingWordNode:     nil,
 		solutionFoundAtDepth: int(^uint(0) >> 1),
 		maxDepth:             len(from) * 3,
 	}
@@ -85,8 +85,8 @@ func (greedy *GreedySolver) getPath() [][]string {
 
 	greedy.wordTree = greedy.generateTree(head, []string{greedy.from})
 
-	for _, solutionNode := range greedy.matchingWordLeaf {
-		wordChainSolution := extractSolutionFromLeaf(solutionNode)
+	for _, solutionNode := range greedy.matchingWordNode {
+		wordChainSolution := extractSolutionFromNode(solutionNode)
 		wordChainsList = append(wordChainsList, wordChainSolution)
 	}
 	return wordChainsList
@@ -96,7 +96,7 @@ func (greedy *GreedySolver) generateTree(head *WordTreeNode, wordList []string) 
 	// Ending condition
 	if head.Word == greedy.to {
 		greedy.solutionFoundAtDepth = getNodeDepth(head)
-		greedy.matchingWordLeaf = append(greedy.matchingWordLeaf, head)
+		greedy.matchingWordNode = append(greedy.matchingWordNode, head)
 		return head
 	}
 	if getNodeDepth(head) > greedy.solutionFoundAtDepth {
@@ -156,7 +156,7 @@ func (greedy *GreedySolver) Clean() {
 	greedy.to = ""
 	greedy.usefulWords = nil
 	greedy.wordTree = nil
-	greedy.matchingWordLeaf = nil
+	greedy.matchingWordNode = nil
 	greedy.solutionFoundAtDepth = int(^uint(0) >> 1)
 }
 
@@ -194,13 +194,13 @@ func isWordInList(word string, wordList []string) bool {
 	return false
 }
 
-func extractSolutionFromLeaf(leaf *WordTreeNode) []string {
+func extractSolutionFromNode(node *WordTreeNode) []string {
 	var wordChains []string
-	tmpLeaf := leaf
-	wordChains = append(wordChains, tmpLeaf.Word)
-	for tmpLeaf.PreviousElement != nil {
-		tmpLeaf = tmpLeaf.PreviousElement
-		wordChains = append(wordChains, tmpLeaf.Word)
+	tmpNode := node
+	wordChains = append(wordChains, tmpNode.Word)
+	for tmpNode.PreviousElement != nil {
+		tmpNode = tmpNode.PreviousElement
+		wordChains = append(wordChains, tmpNode.Word)
 	}
 	return flipStringSlice(wordChains)
 }
