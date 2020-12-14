@@ -18,18 +18,18 @@ type MockBadFactory struct {
 }
 
 func (badFactory *MockBadFactory) LoadDB() ([]string, error) {
-	return nil, errors.New("from mock : I am a bad factory, Muahahahaha!")
+	return nil, errors.New("from mock : I am a bad factory, mu-ah-ah-ah-aha ")
 }
 
 type MockSolver struct {
 }
 
-func (solver *MockSolver) FindWordChains(string, string, []string) ([]string, error) {
-	return []string{"cat", "cot", "cog", "dog"}, nil
+func (solver *MockSolver) FindWordChains(string, string, []string) ([][]string, error) {
+	return [][]string{{"cat", "cot", "cog", "dog"}, {"cat", "cot", "dot", "dog"}}, nil
 }
 
 func GeneralWordChainsResolverTest(solver Solver, factory Factory, t *testing.T) {
-	expectedResult := []string{"cat", "cot", "cog", "dog"}
+	expectedResult := [][]string{{"cat", "cot", "cog", "dog"}, {"cat", "cot", "dot", "dog"}}
 	wcr := NewWordChainsResolver(solver, factory)
 	err := wcr.LoadDB()
 	assert.Nil(t, err)

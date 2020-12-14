@@ -7,7 +7,7 @@ type Factory interface {
 
 // Solver handle calculus part of the word chains problem
 type Solver interface {
-	FindWordChains(string, string, []string) ([]string, error)
+	FindWordChains(string, string, []string) ([][]string, error)
 }
 
 // WordChainsResolver wrap Solver and Factory interfaces by holding
@@ -34,6 +34,6 @@ func (wcr *WordChainsResolver) LoadDB() error {
 }
 
 // Solve Solver wrapper
-func (wcr *WordChainsResolver) Solve(from, to string) ([]string, error) {
+func (wcr *WordChainsResolver) Solve(from, to string) ([][]string, error) {
 	return wcr.solver.FindWordChains(from, to, wcr.wordList)
 }
