@@ -1,5 +1,13 @@
 package wordchainsresolver
 
+import "errors"
+
+var (
+	// ErrorWordLengthDoesNotMatch is trigger when the words enter to create a word chain
+	// are not the same size
+	ErrorWordLengthDoesNotMatch = errors.New("solver : word length does not match")
+)
+
 // Factory handle everything linked to loading data
 type Factory interface {
 	LoadDB() ([]string, error)

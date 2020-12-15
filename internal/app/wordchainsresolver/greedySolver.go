@@ -1,15 +1,5 @@
 package wordchainsresolver
 
-import (
-	"errors"
-)
-
-var (
-	// ErrorWordLengthDoesNotMatch is trigger when the words enter to create a word chain
-	// are not the same size
-	ErrorWordLengthDoesNotMatch = errors.New("greedy solver : word length does not match")
-)
-
 // GreedyWordTreeNode struct represents words tidy in a tree
 type GreedyWordTreeNode struct {
 	Word            string
