@@ -71,15 +71,15 @@ func TestGetNodeDepth(t *testing.T) {
 	node := NewWordTreeElement("test_depth_2", 0, head)
 	expectedHeadDepth := 1
 	expectedNodeDepth := 2
-	assert.Equal(t, expectedHeadDepth, getNodeDepth(head))
-	assert.Equal(t, expectedNodeDepth, getNodeDepth(node))
+	assert.Equal(t, expectedHeadDepth, head.getNodeDepth())
+	assert.Equal(t, expectedNodeDepth, node.getNodeDepth())
 }
 
 func TestExtractSolutionFromNode(t *testing.T) {
 	head := NewWordTreeElement("test", 0, nil)
 	node := NewWordTreeElement("test_depth_2", 0, head)
 	expected := []string{"test", "test_depth_2"}
-	assert.Equal(t, expected, extractSolutionFromNode(node))
+	assert.Equal(t, expected, node.extractSolutionFromNode())
 }
 
 func TestIsWordInList(t *testing.T) {

@@ -28,6 +28,27 @@ func NewWordTreeElement(word string, score int, previous *WordTreeNode) *WordTre
 	}
 }
 
+func (node *WordTreeNode) extractSolutionFromNode() []string {
+	var wordChains []string
+	tmpNode := node
+	wordChains = append(wordChains, tmpNode.Word)
+	for tmpNode.PreviousElement != nil {
+		tmpNode = tmpNode.PreviousElement
+		wordChains = append(wordChains, tmpNode.Word)
+	}
+	return flipStringSlice(wordChains)
+}
+
+func (node *WordTreeNode) getNodeDepth() int {
+	depth := 1
+	tmpNode := node
+	for tmpNode.PreviousElement != nil {
+		depth++
+		tmpNode = tmpNode.PreviousElement
+	}
+	return depth
+}
+
 // GreedySolver is a implementation of Solver interface
 type GreedySolver struct {
 	wordList             []string
@@ -73,6 +94,7 @@ func (greedy *GreedySolver) FindWordChains(from string, to string, wordList []st
 	greedy.maxDepth = len(from) * 3
 
 	greedy.getUsefulWordOnly()
+
 	solutions := greedy.getPath()
 	greedy.Clean()
 	return getBestSolution(solutions), nil
@@ -86,7 +108,7 @@ func (greedy *GreedySolver) getPath() [][]string {
 	greedy.wordTree = greedy.generateTree(head, []string{greedy.from})
 
 	for _, solutionNode := range greedy.matchingWordNode {
-		wordChainSolution := extractSolutionFromNode(solutionNode)
+		wordChainSolution := solutionNode.extractSolutionFromNode()
 		wordChainsList = append(wordChainsList, wordChainSolution)
 	}
 	return wordChainsList
@@ -95,11 +117,11 @@ func (greedy *GreedySolver) getPath() [][]string {
 func (greedy *GreedySolver) generateTree(head *WordTreeNode, wordList []string) *WordTreeNode {
 	// Ending condition
 	if head.Word == greedy.to {
-		greedy.solutionFoundAtDepth = getNodeDepth(head)
+		greedy.solutionFoundAtDepth = head.getNodeDepth()
 		greedy.matchingWordNode = append(greedy.matchingWordNode, head)
 		return head
 	}
-	if getNodeDepth(head) > greedy.solutionFoundAtDepth {
+	if head.getNodeDepth() > greedy.solutionFoundAtDepth {
 		return head
 	}
 
@@ -108,7 +130,7 @@ func (greedy *GreedySolver) generateTree(head *WordTreeNode, wordList []string) 
 	numberOfChildAdded := 1
 	targetedScore := head.ScoreToGoal + 1
 	head, numberOfChildAdded = greedy.createPopulation(head, possibleNextWords, wordList, targetedScore)
-	depth := getNodeDepth(head)
+	depth := head.getNodeDepth()
 	if numberOfChildAdded == 0 && depth < greedy.maxDepth {
 		head, numberOfChildAdded = greedy.createPopulation(head, possibleNextWords, wordList, targetedScore-1)
 	}
@@ -192,27 +214,6 @@ func isWordInList(word string, wordList []string) bool {
 		}
 	}
 	return false
-}
-
-func extractSolutionFromNode(node *WordTreeNode) []string {
-	var wordChains []string
-	tmpNode := node
-	wordChains = append(wordChains, tmpNode.Word)
-	for tmpNode.PreviousElement != nil {
-		tmpNode = tmpNode.PreviousElement
-		wordChains = append(wordChains, tmpNode.Word)
-	}
-	return flipStringSlice(wordChains)
-}
-
-func getNodeDepth(node *WordTreeNode) int {
-	depth := 1
-	tmpNode := node
-	for tmpNode.PreviousElement != nil {
-		depth++
-		tmpNode = tmpNode.PreviousElement
-	}
-	return depth
 }
 
 func flipStringSlice(strSlice []string) []string {
