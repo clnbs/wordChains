@@ -22,6 +22,7 @@ Implementation of Code Kata19 exercice. Link to the challenge [here](http://code
     * [BFS cons](#bfs-cons)
     * [How BFS works](#how-bfs-works)
   * [Other possible algorithm](#other-possible-algorithms)
+* [TODO list](#todo-list)
 * [License](#license)
 * [Contact](#contact)
 * [Acknowledgements](#acknowledgements)
@@ -48,7 +49,7 @@ cd wordChains
 ```
 make all
 ```
-With command should create a binary for each implementation 
+This command should create a binary for each implementation 
  
 ## Usage
 
@@ -125,6 +126,10 @@ The greedy algorithm do not ensure to give the best solution possible, plus, it 
  - DFS
  - A*
 
+## TODO list
+ - Make tests and builds automated with a Makefile and Docker containers
+ - This README.md file in BFS and other algorithms section
+
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
@@ -141,3 +146,4 @@ Project Link: [https://github.com/clnbs/wordChains](https://github.com/clnbs/wor
 * [Cycloid.io](https://www.cycloid.io/)
 * [mieliestronk.com - word list](http://www.mieliestronk.com/)
 * [Wikipedia - BFS](https://en.wikipedia.org/wiki/Breadth-first_search)
+* [Golang testify from stretchr](https://github.com/stretchr/testify)
