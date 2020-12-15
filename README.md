@@ -133,7 +133,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 Colin Bois - <colin.bois@rocketmail.com>
 
-Project Link: [https://github.com/clnbs/karateChop](https://github.com/clnbs/karateChop)
+Project Link: [https://github.com/clnbs/wordChains](https://github.com/clnbs/wordChains)
 
 ## Acknowledgements
 
