@@ -22,7 +22,7 @@ var (
 	}
 )
 
-func buildMockWordsTree() *WordTreeNode {
+func buildMockWordsTree() *GreedyWordTreeNode {
 	head := NewWordTreeElement("cat", 0, nil)
 	head.NextElements = append(head.NextElements, NewWordTreeElement("cot", 1, head))
 	head.NextElements[0].NextElements = append(head.NextElements[0].NextElements,

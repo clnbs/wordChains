@@ -10,17 +10,17 @@ var (
 	ErrorWordLengthDoesNotMatch = errors.New("greedy solver : word length does not match")
 )
 
-// WordTreeNode struct represents words tidy in a tree
-type WordTreeNode struct {
+// GreedyWordTreeNode struct represents words tidy in a tree
+type GreedyWordTreeNode struct {
 	Word            string
 	ScoreToGoal     int
-	PreviousElement *WordTreeNode
-	NextElements    []*WordTreeNode
+	PreviousElement *GreedyWordTreeNode
+	NextElements    []*GreedyWordTreeNode
 }
 
-// NewWordTreeElement is a WordTreeNode constructor
-func NewWordTreeElement(word string, score int, previous *WordTreeNode) *WordTreeNode {
-	return &WordTreeNode{
+// NewWordTreeElement is a GreedyWordTreeNode constructor
+func NewWordTreeElement(word string, score int, previous *GreedyWordTreeNode) *GreedyWordTreeNode {
+	return &GreedyWordTreeNode{
 		Word:            word,
 		ScoreToGoal:     score,
 		PreviousElement: previous,
@@ -28,7 +28,7 @@ func NewWordTreeElement(word string, score int, previous *WordTreeNode) *WordTre
 	}
 }
 
-func (node *WordTreeNode) extractSolutionFromNode() []string {
+func (node *GreedyWordTreeNode) extractSolutionFromNode() []string {
 	var wordChains []string
 	tmpNode := node
 	wordChains = append(wordChains, tmpNode.Word)
@@ -39,7 +39,7 @@ func (node *WordTreeNode) extractSolutionFromNode() []string {
 	return flipStringSlice(wordChains)
 }
 
-func (node *WordTreeNode) getNodeDepth() int {
+func (node *GreedyWordTreeNode) getNodeDepth() int {
 	depth := 1
 	tmpNode := node
 	for tmpNode.PreviousElement != nil {
@@ -55,8 +55,8 @@ type GreedySolver struct {
 	from                 string
 	to                   string
 	usefulWords          []string
-	wordTree             *WordTreeNode
-	matchingWordNode     []*WordTreeNode
+	wordTree             *GreedyWordTreeNode
+	matchingWordNode     []*GreedyWordTreeNode
 	solutionFoundAtDepth int
 	maxDepth             int
 }
@@ -114,7 +114,7 @@ func (greedy *GreedySolver) getPath() [][]string {
 	return wordChainsList
 }
 
-func (greedy *GreedySolver) generateTree(head *WordTreeNode, wordList []string) *WordTreeNode {
+func (greedy *GreedySolver) generateTree(head *GreedyWordTreeNode, wordList []string) *GreedyWordTreeNode {
 	// Ending condition
 	if head.Word == greedy.to {
 		greedy.solutionFoundAtDepth = head.getNodeDepth()
@@ -138,7 +138,7 @@ func (greedy *GreedySolver) generateTree(head *WordTreeNode, wordList []string) 
 	return head
 }
 
-func (greedy *GreedySolver) createPopulation(head *WordTreeNode, possibleNextWords, wordList []string, targetedScore int) (*WordTreeNode, int) {
+func (greedy *GreedySolver) createPopulation(head *GreedyWordTreeNode, possibleNextWords, wordList []string, targetedScore int) (*GreedyWordTreeNode, int) {
 	numberOfNodeCreated := 0
 	for _, word := range possibleNextWords {
 		scoreFromGoal := computeScoreBetweenTwoWord(word, greedy.to)
