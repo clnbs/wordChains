@@ -84,14 +84,27 @@ func TestExcludeStringsFromStrings(t *testing.T) {
 }
 
 func TestGetScoreBetweenTwoWord(t *testing.T) {
-	wordsList := []string{"abc", "dbz", "hxh", "abc", "abcd"}
-	expectedResult := []int{1, 0, 3, 0, 0}
-	result := make([]int, 5)
+	wordsList := []string{"abc", "dbz", "hxh", "abc", "abcd", "", ""}
+	expectedResult := []int{1, 0, 3, 0, -1, -1}
+	result := make([]int, len(expectedResult))
 	result[0] = getScoreBetweenTwoWord(wordsList[0], wordsList[1])
 	result[1] = getScoreBetweenTwoWord(wordsList[0], wordsList[2])
 	result[2] = getScoreBetweenTwoWord(wordsList[0], wordsList[3])
 	result[3] = getScoreBetweenTwoWord(wordsList[1], wordsList[2])
 	result[4] = getScoreBetweenTwoWord(wordsList[0], wordsList[4])
+	result[5] = getScoreBetweenTwoWord(wordsList[5], wordsList[6])
+	assert.Equal(t, expectedResult, result)
+}
+
+func TestIsPossibleNextWord(t *testing.T) {
+	wordsList := []string{"abc", "abd", "acb", "acd", "abcd", "", ""}
+	expectedResult := []bool{true, false, false, true, false}
+	result := make([]bool, len(expectedResult))
+	result[0] = isPossibleNextWord(wordsList[0], wordsList[1])
+	result[1] = isPossibleNextWord(wordsList[0], wordsList[2])
+	result[2] = isPossibleNextWord(wordsList[0], wordsList[4])
+	result[3] = isPossibleNextWord(wordsList[2], wordsList[3])
+	result[4] = isPossibleNextWord(wordsList[5], wordsList[6])
 	assert.Equal(t, expectedResult, result)
 }
 

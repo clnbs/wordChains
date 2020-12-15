@@ -41,8 +41,8 @@ func (wcr *WordChainsResolver) Solve(from, to string) ([][]string, error) {
 // Helpers
 
 func getScoreBetweenTwoWord(word1, word2 string) int {
-	if len(word1) != len(word2) {
-		return 0
+	if len(word1) != len(word2) || len(word1) == 0 {
+		return -1
 	}
 	var score int
 	word1Chars := []rune(word1)
@@ -53,6 +53,14 @@ func getScoreBetweenTwoWord(word1, word2 string) int {
 		}
 	}
 	return score
+}
+
+func isPossibleNextWord(word1, word2 string) bool {
+	if len(word1) == 0 {
+		return false
+	}
+	score := getScoreBetweenTwoWord(word1, word2)
+	return score == len(word1)-1
 }
 
 func excludeStringsFromStrings(strs, bannedWords []string) []string {
