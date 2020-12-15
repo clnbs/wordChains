@@ -23,16 +23,16 @@ var (
 )
 
 func buildMockWordsTree() *GreedyWordTreeNode {
-	head := NewWordTreeElement("cat", 0, nil)
-	head.NextElements = append(head.NextElements, NewWordTreeElement("cot", 1, head))
+	head := NewGreedyWordTreeElement("cat", 0, nil)
+	head.NextElements = append(head.NextElements, NewGreedyWordTreeElement("cot", 1, head))
 	head.NextElements[0].NextElements = append(head.NextElements[0].NextElements,
-		NewWordTreeElement("cog", 2, head.NextElements[0]),
-		NewWordTreeElement("dot", 2, head.NextElements[0]),
+		NewGreedyWordTreeElement("cog", 2, head.NextElements[0]),
+		NewGreedyWordTreeElement("dot", 2, head.NextElements[0]),
 	)
 	head.NextElements[0].NextElements[0].NextElements = append(head.NextElements[0].NextElements[0].NextElements,
-		NewWordTreeElement("dog", 3, head.NextElements[0].NextElements[0]))
+		NewGreedyWordTreeElement("dog", 3, head.NextElements[0].NextElements[0]))
 	head.NextElements[0].NextElements[1].NextElements = append(head.NextElements[0].NextElements[1].NextElements,
-		NewWordTreeElement("dog", 3, head.NextElements[0].NextElements[1]))
+		NewGreedyWordTreeElement("dog", 3, head.NextElements[0].NextElements[1]))
 	return head
 }
 
@@ -45,67 +45,13 @@ func TestGreedySolver_FindWordChains(t *testing.T) {
 	assert.NotNil(t, err)
 }
 
-func TestGetBestSolution(t *testing.T) {
-	expected := [][]string{
-		{"1", "2", "3"},
-		{"a", "b", "c"},
-	}
-	testingValues := [][]string{
-		{"1", "2", "3"},
-		{"a", "b", "c"},
-		{"a", "b", "1", "2"},
-	}
-	result := getBestSolution(testingValues)
-	assert.Equal(t, expected, result)
-}
-
-func TestFlipStringSlice(t *testing.T) {
-	expected := []string{"1", "2", "3"}
-	toFormat := []string{"3", "2", "1"}
-	result := flipStringSlice(toFormat)
-	assert.Equal(t, expected, result)
-}
-
 func TestGetNodeDepth(t *testing.T) {
-	head := NewWordTreeElement("test", 0, nil)
-	node := NewWordTreeElement("test_depth_2", 0, head)
+	head := NewGreedyWordTreeElement("test", 0, nil)
+	node := NewGreedyWordTreeElement("test_depth_2", 0, head)
 	expectedHeadDepth := 1
 	expectedNodeDepth := 2
 	assert.Equal(t, expectedHeadDepth, head.getNodeDepth())
 	assert.Equal(t, expectedNodeDepth, node.getNodeDepth())
-}
-
-func TestExtractSolutionFromNode(t *testing.T) {
-	head := NewWordTreeElement("test", 0, nil)
-	node := NewWordTreeElement("test_depth_2", 0, head)
-	expected := []string{"test", "test_depth_2"}
-	assert.Equal(t, expected, node.extractSolutionFromNode())
-}
-
-func TestIsWordInList(t *testing.T) {
-	wordsList := []string{"one", "two", "three"}
-	assert.Equal(t, true, isWordInList("one", wordsList))
-	assert.Equal(t, false, isWordInList("four", wordsList))
-}
-
-func TestExcludeStringsFromStrings(t *testing.T) {
-	wordsList := []string{"one", "two", "three", "four"}
-	bannedWords := []string{"two", "four"}
-	expected := []string{"one", "three"}
-	result := excludeStringsFromStrings(wordsList, bannedWords)
-	assert.Equal(t, expected, result)
-}
-
-func TestComputeScoreBetweenTwoWord(t *testing.T) {
-	wordsList := []string{"abc", "dbz", "hxh", "abc", "abcd"}
-	expectedResult := []int{1, 0, 3, 0, 0}
-	result := make([]int, 5)
-	result[0] = computeScoreBetweenTwoWord(wordsList[0], wordsList[1])
-	result[1] = computeScoreBetweenTwoWord(wordsList[0], wordsList[2])
-	result[2] = computeScoreBetweenTwoWord(wordsList[0], wordsList[3])
-	result[3] = computeScoreBetweenTwoWord(wordsList[1], wordsList[2])
-	result[4] = computeScoreBetweenTwoWord(wordsList[0], wordsList[4])
-	assert.Equal(t, expectedResult, result)
 }
 
 func TestListPossibleNextWords(t *testing.T) {
@@ -130,7 +76,7 @@ func TestGetUsefulWordOnly(t *testing.T) {
 func TestGenerateTree(t *testing.T) {
 	solver := NewGreedySolverWithParams("cat", "dog", []string{"cat", "cot", "cog", "dog", "dot"})
 	solver.getUsefulWordOnly()
-	head := NewWordTreeElement("cat", 0, nil)
+	head := NewGreedyWordTreeElement("cat", 0, nil)
 	result := solver.generateTree(head, []string{"cat"})
 	expected := buildMockWordsTree()
 	assert.Equal(t, expected, result)

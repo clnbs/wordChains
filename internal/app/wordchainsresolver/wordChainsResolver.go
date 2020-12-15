@@ -37,3 +37,63 @@ func (wcr *WordChainsResolver) LoadDB() error {
 func (wcr *WordChainsResolver) Solve(from, to string) ([][]string, error) {
 	return wcr.solver.FindWordChains(from, to, wcr.wordList)
 }
+
+// Helpers
+
+func getScoreBetweenTwoWord(word1, word2 string) int {
+	if len(word1) != len(word2) {
+		return 0
+	}
+	var score int
+	word1Chars := []rune(word1)
+	word2Chars := []rune(word2)
+	for index, char := range word1Chars {
+		if char == word2Chars[index] {
+			score++
+		}
+	}
+	return score
+}
+
+func excludeStringsFromStrings(strs, bannedWords []string) []string {
+	var strsWithoutBannedWords []string
+	for _, str := range strs {
+		if !isWordInList(str, bannedWords) {
+			strsWithoutBannedWords = append(strsWithoutBannedWords, str)
+		}
+	}
+	return strsWithoutBannedWords
+}
+
+func isWordInList(word string, wordList []string) bool {
+	for _, wordInList := range wordList {
+		if word == wordInList {
+			return true
+		}
+	}
+	return false
+}
+
+func flipStringSlice(strSlice []string) []string {
+	flipStrSlice := make([]string, len(strSlice))
+	for index := range strSlice {
+		flipStrSlice[len(strSlice)-1-index] = strSlice[index]
+	}
+	return flipStrSlice
+}
+
+func getBestSolution(solutions [][]string) [][]string {
+	bestScore := int(^uint(0) >> 1)
+	var bestSolutions [][]string
+	for _, solution := range solutions {
+		if len(solution) < bestScore {
+			bestScore = len(solution)
+		}
+	}
+	for _, solution := range solutions {
+		if len(solution) == bestScore {
+			bestSolutions = append(bestSolutions, solution)
+		}
+	}
+	return bestSolutions
+}

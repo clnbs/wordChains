@@ -18,8 +18,8 @@ type GreedyWordTreeNode struct {
 	NextElements    []*GreedyWordTreeNode
 }
 
-// NewWordTreeElement is a GreedyWordTreeNode constructor
-func NewWordTreeElement(word string, score int, previous *GreedyWordTreeNode) *GreedyWordTreeNode {
+// NewGreedyWordTreeElement is a GreedyWordTreeNode constructor
+func NewGreedyWordTreeElement(word string, score int, previous *GreedyWordTreeNode) *GreedyWordTreeNode {
 	return &GreedyWordTreeNode{
 		Word:            word,
 		ScoreToGoal:     score,
@@ -101,7 +101,7 @@ func (greedy *GreedySolver) FindWordChains(from string, to string, wordList []st
 }
 
 func (greedy *GreedySolver) getPath() [][]string {
-	head := NewWordTreeElement(greedy.from, computeScoreBetweenTwoWord(greedy.from, greedy.to), nil)
+	head := NewGreedyWordTreeElement(greedy.from, getScoreBetweenTwoWord(greedy.from, greedy.to), nil)
 
 	var wordChainsList [][]string
 
@@ -141,10 +141,10 @@ func (greedy *GreedySolver) generateTree(head *GreedyWordTreeNode, wordList []st
 func (greedy *GreedySolver) createPopulation(head *GreedyWordTreeNode, possibleNextWords, wordList []string, targetedScore int) (*GreedyWordTreeNode, int) {
 	numberOfNodeCreated := 0
 	for _, word := range possibleNextWords {
-		scoreFromGoal := computeScoreBetweenTwoWord(word, greedy.to)
+		scoreFromGoal := getScoreBetweenTwoWord(word, greedy.to)
 		if scoreFromGoal == targetedScore {
 			numberOfNodeCreated++
-			newNode := NewWordTreeElement(word, scoreFromGoal, head)
+			newNode := NewGreedyWordTreeElement(word, scoreFromGoal, head)
 			wordList = append(wordList, word)
 			newNode = greedy.generateTree(newNode, wordList)
 			head.NextElements = append(head.NextElements, newNode)
@@ -165,7 +165,7 @@ func (greedy *GreedySolver) getUsefulWordOnly() {
 func (greedy *GreedySolver) listPossibleNextWords(word string) []string {
 	var possibleNewWords []string
 	for _, nextWord := range greedy.usefulWords {
-		if computeScoreBetweenTwoWord(nextWord, word) == len(word)-1 {
+		if getScoreBetweenTwoWord(nextWord, word) == len(word)-1 {
 			possibleNewWords = append(possibleNewWords, nextWord)
 		}
 	}
@@ -180,62 +180,4 @@ func (greedy *GreedySolver) Clean() {
 	greedy.wordTree = nil
 	greedy.matchingWordNode = nil
 	greedy.solutionFoundAtDepth = int(^uint(0) >> 1)
-}
-
-func computeScoreBetweenTwoWord(word1, word2 string) int {
-	if len(word1) != len(word2) {
-		return 0
-	}
-	var score int
-	word1Chars := []rune(word1)
-	word2Chars := []rune(word2)
-	for index, char := range word1Chars {
-		if char == word2Chars[index] {
-			score++
-		}
-	}
-	return score
-}
-
-func excludeStringsFromStrings(strs, bannedWords []string) []string {
-	var strsWithoutBannedWords []string
-	for _, str := range strs {
-		if !isWordInList(str, bannedWords) {
-			strsWithoutBannedWords = append(strsWithoutBannedWords, str)
-		}
-	}
-	return strsWithoutBannedWords
-}
-
-func isWordInList(word string, wordList []string) bool {
-	for _, wordInList := range wordList {
-		if word == wordInList {
-			return true
-		}
-	}
-	return false
-}
-
-func flipStringSlice(strSlice []string) []string {
-	flipStrSlice := make([]string, len(strSlice))
-	for index := range strSlice {
-		flipStrSlice[len(strSlice)-1-index] = strSlice[index]
-	}
-	return flipStrSlice
-}
-
-func getBestSolution(solutions [][]string) [][]string {
-	bestScore := int(^uint(0) >> 1)
-	var bestSolutions [][]string
-	for _, solution := range solutions {
-		if len(solution) < bestScore {
-			bestScore = len(solution)
-		}
-	}
-	for _, solution := range solutions {
-		if len(solution) == bestScore {
-			bestSolutions = append(bestSolutions, solution)
-		}
-	}
-	return bestSolutions
 }

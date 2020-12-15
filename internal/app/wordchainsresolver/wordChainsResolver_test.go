@@ -61,3 +61,57 @@ func TestWordChainsResolver_LoadDB(t *testing.T) {
 func TestWordChainsResolver_Solve(t *testing.T) {
 	GeneralWordChainsResolverTest(&MockSolver{}, &MockFactory{}, t)
 }
+
+func TestExtractSolutionFromNode(t *testing.T) {
+	head := NewGreedyWordTreeElement("test", 0, nil)
+	node := NewGreedyWordTreeElement("test_depth_2", 0, head)
+	expected := []string{"test", "test_depth_2"}
+	assert.Equal(t, expected, node.extractSolutionFromNode())
+}
+
+func TestIsWordInList(t *testing.T) {
+	wordsList := []string{"one", "two", "three"}
+	assert.Equal(t, true, isWordInList("one", wordsList))
+	assert.Equal(t, false, isWordInList("four", wordsList))
+}
+
+func TestExcludeStringsFromStrings(t *testing.T) {
+	wordsList := []string{"one", "two", "three", "four"}
+	bannedWords := []string{"two", "four"}
+	expected := []string{"one", "three"}
+	result := excludeStringsFromStrings(wordsList, bannedWords)
+	assert.Equal(t, expected, result)
+}
+
+func TestGetScoreBetweenTwoWord(t *testing.T) {
+	wordsList := []string{"abc", "dbz", "hxh", "abc", "abcd"}
+	expectedResult := []int{1, 0, 3, 0, 0}
+	result := make([]int, 5)
+	result[0] = getScoreBetweenTwoWord(wordsList[0], wordsList[1])
+	result[1] = getScoreBetweenTwoWord(wordsList[0], wordsList[2])
+	result[2] = getScoreBetweenTwoWord(wordsList[0], wordsList[3])
+	result[3] = getScoreBetweenTwoWord(wordsList[1], wordsList[2])
+	result[4] = getScoreBetweenTwoWord(wordsList[0], wordsList[4])
+	assert.Equal(t, expectedResult, result)
+}
+
+func TestGetBestSolution(t *testing.T) {
+	expected := [][]string{
+		{"1", "2", "3"},
+		{"a", "b", "c"},
+	}
+	testingValues := [][]string{
+		{"1", "2", "3"},
+		{"a", "b", "c"},
+		{"a", "b", "1", "2"},
+	}
+	result := getBestSolution(testingValues)
+	assert.Equal(t, expected, result)
+}
+
+func TestFlipStringSlice(t *testing.T) {
+	expected := []string{"1", "2", "3"}
+	toFormat := []string{"3", "2", "1"}
+	result := flipStringSlice(toFormat)
+	assert.Equal(t, expected, result)
+}
