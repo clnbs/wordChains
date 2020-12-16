@@ -132,8 +132,8 @@ The greedy algorithm do not ensure to give the best solution possible, plus, it 
  - A*
 
 ## TODO list
- - Make tests and builds automated with a Makefile and Docker containers
  - This README.md file in BFS and other algorithms section
+ - Refactoring test code
 
 ## License
 
