@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/clnbs/wordChains/internal/app/wordchainsresolver"
 )
@@ -37,15 +38,27 @@ func main() {
 		usage(programName)
 		return
 	}
+	filePath := args[0]
+	word1 := args[1]
+	word2 := args[2]
 	solver := wordchainsresolver.NewBFSSolver()
-	factory := wordchainsresolver.NewFileLoaderFactory(args[0])
+	factory := wordchainsresolver.NewFileLoaderFactory(filePath)
 	wcr := wordchainsresolver.NewWordChainsResolver(solver, factory)
 	err := wcr.LoadDB()
 	if err != nil {
 		fmt.Println("error while loading word list :", err)
 		return
 	}
-	path, err := wcr.Solve(args[1], args[2])
+	if !wcr.IsWordInDB(word1) {
+		fmt.Println(word1, "is not in your database")
+		return
+	}
+	if !wcr.IsWordInDB(args[2]) {
+		fmt.Println(args[2], "is not in your database")
+		return
+	}
+	fmt.Println("looking for word chains from", word1, "to", word2+", please wait ...")
+	path, err := wcr.Solve(strings.ToLower(word1), strings.ToLower(word2))
 	if err != nil {
 		fmt.Println("error while solving word chains :", err)
 		return
