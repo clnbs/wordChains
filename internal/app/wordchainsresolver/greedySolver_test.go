@@ -22,7 +22,10 @@ var (
 	}
 )
 
-func buildMockWordsTree() *GreedyWordTreeNode {
+// tree built for chains :
+// cat -> cot -> cog -> dog
+// cat -> cot -> dot -> dog
+func buildSimpleMockWordsTree() *GreedyWordTreeNode {
 	head := NewGreedyWordTreeElement("cat", 0, nil)
 	head.NextElements = append(head.NextElements, NewGreedyWordTreeElement("cot", 1, head))
 	head.NextElements[0].NextElements = append(head.NextElements[0].NextElements,
@@ -36,9 +39,27 @@ func buildMockWordsTree() *GreedyWordTreeNode {
 	return head
 }
 
+// tree built for chain :
+// aaaa -> abaa -> abea -> abee -> aeee -> eeee
+func buildMoreComplicatedWordsTree() *GreedyWordTreeNode {
+	head := NewGreedyWordTreeElement("aaaa", 0, nil)
+	abaa := NewGreedyWordTreeElement("abaa", 0, head)
+	head.NextElements = append(head.NextElements, abaa)
+	abea := NewGreedyWordTreeElement("abea", 1, abaa)
+	abaa.NextElements = append(abaa.NextElements, abea)
+	abee := NewGreedyWordTreeElement("abee", 2, abea)
+	abea.NextElements = append(abea.NextElements, abee)
+	aeee := NewGreedyWordTreeElement("aeee", 3, abee)
+	abee.NextElements = append(abee.NextElements, aeee)
+	eeee := NewGreedyWordTreeElement("eeee", 4, aeee)
+	aeee.NextElements = append(aeee.NextElements, eeee)
+
+	return head
+}
+
 func TestGreedySolver_FindWordChains(t *testing.T) {
 	solver := NewGreedySolver()
-	factory := NewFileLoaderFactory(os.Getenv("GOPATH") + "/src/github.com/clnbs/wordChains/assets/app/wordlist.txt")
+	factory := NewFileLoaderFactory(os.Getenv("GOPATH") + "/src/github.com/clnbs/wordChains/assets/app/small_en.txt")
 	GeneralWordChainsResolverTest(solver, factory, t)
 	solver = NewGreedySolver()
 	_, err := solver.FindWordChains("dummy", "to", []string{})
@@ -78,7 +99,14 @@ func TestGenerateTree(t *testing.T) {
 	solver.getUsefulWordOnly()
 	head := NewGreedyWordTreeElement("cat", 0, nil)
 	result := solver.generateTree(head, []string{"cat"})
-	expected := buildMockWordsTree()
+	expected := buildSimpleMockWordsTree()
+	assert.Equal(t, expected, result)
+
+	solver = NewGreedySolverWithParams("aaaa", "eeee", []string{"aaaa", "abaa", "abea", "abee", "aeee", "eeee"})
+	solver.getUsefulWordOnly()
+	head = NewGreedyWordTreeElement("aaaa", 0, nil)
+	result = solver.generateTree(head, []string{"aaaa"})
+	expected = buildMoreComplicatedWordsTree()
 	assert.Equal(t, expected, result)
 }
 
