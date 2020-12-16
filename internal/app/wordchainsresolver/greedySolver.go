@@ -8,7 +8,8 @@ type GreedyWordTreeNode struct {
 	NextElements    []*GreedyWordTreeNode
 }
 
-// NewGreedyWordTreeElement is a GreedyWordTreeNode constructor
+// NewGreedyWordTreeElement is GreedyWordTreeNode constructor
+// input : a word to be push in the tree, its score from the final word, its previous element
 func NewGreedyWordTreeElement(word string, score int, previous *GreedyWordTreeNode) *GreedyWordTreeNode {
 	return &GreedyWordTreeNode{
 		Word:            word,
@@ -39,7 +40,8 @@ func (node *GreedyWordTreeNode) getNodeDepth() int {
 	return depth
 }
 
-// GreedySolver is a implementation of Solver interface
+// GreedySolver is a implementation of Solver interface in order to find
+// word chains with a greedy algorithm
 type GreedySolver struct {
 	wordList             []string
 	from                 string
@@ -59,6 +61,9 @@ func NewGreedySolver() *GreedySolver {
 }
 
 // NewGreedySolverWithParams is a GreedySolver constructor too but with params
+// input : the first word of the futur word chains, the ending word of the futur word chains,
+// the word list database
+// /!\ Warning, using this constructor is unsafe and should be used in a testing purpose
 func NewGreedySolverWithParams(from string, to string, wordList []string) *GreedySolver {
 	return &GreedySolver{
 		wordList:             wordList,
@@ -75,7 +80,7 @@ func NewGreedySolverWithParams(from string, to string, wordList []string) *Greed
 // FindWordChains implements the Solver interface. The greedy solver generate a word chain
 // using the greedy algorithm. It is not complete so it may not give any result
 func (greedy *GreedySolver) FindWordChains(from string, to string, wordList []string) ([][]string, error) {
-	if len(from) != len(to) {
+	if len([]rune(from)) != len([]rune(to)) {
 		return nil, ErrorWordLengthDoesNotMatch
 	}
 	greedy.from = from
@@ -162,7 +167,7 @@ func (greedy *GreedySolver) listPossibleNextWords(word string) []string {
 	return possibleNewWords
 }
 
-// Clean delete all data from previous run
+// Clean delete all data stored in the current GreedySolver instance
 func (greedy *GreedySolver) Clean() {
 	greedy.from = ""
 	greedy.to = ""
