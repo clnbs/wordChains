@@ -64,7 +64,12 @@ This command will start all static tests and create an HTML file named `cover.ht
 ### Start each implementation
 For each implementation, you can start a specific binary in the form `<implementation_name>.bin` at the root directory of this project. To start a binary, you can simply run e.g :
 ```bash
-./greedy.bin
+./greedy.bin <path to the word lists file> <first word> <second word>
+```
+
+e.g :
+```bash
+./bfs.bin assets/app/small_en.txt cat dog
 ```
 
 ## Under the hood
