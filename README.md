@@ -144,6 +144,7 @@ Project Link: [https://github.com/clnbs/wordChains](https://github.com/clnbs/wor
 
 * [Code Kata](http://codekata.com/)
 * [Cycloid.io](https://www.cycloid.io/)
-* [mieliestronk.com - word list](http://www.mieliestronk.com/)
+* [mieliestronk.com - word list](http://www.mieliestronk.com/corncob_lowercase.txt)
 * [Wikipedia - BFS](https://en.wikipedia.org/wiki/Breadth-first_search)
 * [Golang testify from stretchr](https://github.com/stretchr/testify)
+* [lorenbrichter - github.com - word list](https://github.com/lorenbrichter/Words)
