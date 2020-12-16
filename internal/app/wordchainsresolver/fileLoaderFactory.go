@@ -3,6 +3,7 @@ package wordchainsresolver
 import (
 	"bufio"
 	"os"
+	"strings"
 )
 
 //FileLoaderFactory struct implements Factory interface
@@ -25,7 +26,7 @@ func (fileLoader *FileLoaderFactory) LoadDB() ([]string, error) {
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
-		wordList = append(wordList, scanner.Text())
+		wordList = append(wordList, strings.ToLower(scanner.Text()))
 	}
 
 	if err := scanner.Err(); err != nil {
