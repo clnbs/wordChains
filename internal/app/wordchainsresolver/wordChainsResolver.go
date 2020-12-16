@@ -6,6 +6,9 @@ var (
 	// ErrorWordLengthDoesNotMatch is trigger when the words enter to create a word chain
 	// are not the same size
 	ErrorWordLengthDoesNotMatch = errors.New("solver : word length does not match")
+
+	//ErrorWordNotFoundInDB is trigger when one word is not loaded
+	ErrorWordNotFoundInDB = errors.New("solver : word not found in loaded db")
 )
 
 // Factory handle everything linked to loading data
@@ -43,18 +46,31 @@ func (wcr *WordChainsResolver) LoadDB() error {
 
 // Solve Solver wrapper
 func (wcr *WordChainsResolver) Solve(from, to string) ([][]string, error) {
+	if !isWordInList(from, wcr.wordList) || !isWordInList(to, wcr.wordList) {
+		return nil, ErrorWordNotFoundInDB
+	}
 	return wcr.solver.FindWordChains(from, to, wcr.wordList)
+}
+
+// IsWordInDB check if a word is present in the loaded database
+func (wcr *WordChainsResolver) IsWordInDB(w string) bool {
+	for _, word := range wcr.wordList {
+		if w == word {
+			return true
+		}
+	}
+	return false
 }
 
 // Helpers
 
 func getScoreBetweenTwoWord(word1, word2 string) int {
-	if len(word1) != len(word2) || len(word1) == 0 {
-		return -1
-	}
 	var score int
 	word1Chars := []rune(word1)
 	word2Chars := []rune(word2)
+	if len(word1Chars) != len(word2Chars) || len(word1Chars) == 0 {
+		return -1
+	}
 	for index, char := range word1Chars {
 		if char == word2Chars[index] {
 			score++

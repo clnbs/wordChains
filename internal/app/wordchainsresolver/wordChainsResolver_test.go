@@ -36,6 +36,8 @@ func GeneralWordChainsResolverTest(solver Solver, factory Factory, t *testing.T)
 	result, err := wcr.Solve("cat", "dog")
 	assert.Nil(t, err)
 	assert.Equal(t, expectedResult, result)
+
+	_, err = wcr.Solve("www", "dog")
 }
 
 func TestNewWordChainsResolver(t *testing.T) {
@@ -56,6 +58,15 @@ func TestWordChainsResolver_LoadDB(t *testing.T) {
 	wcr = NewWordChainsResolver(&MockSolver{}, &MockBadFactory{})
 	err = wcr.LoadDB()
 	assert.NotNil(t, err)
+}
+
+func TestWordChainsResolver_IsWordInDB(t *testing.T) {
+	wcr := NewWordChainsResolver(&MockSolver{}, &MockFactory{})
+	err := wcr.LoadDB()
+	assert.Nil(t, err)
+
+	assert.Equal(t, true, wcr.IsWordInDB("cat"))
+	assert.Equal(t, false, wcr.IsWordInDB("www"))
 }
 
 func TestWordChainsResolver_Solve(t *testing.T) {
