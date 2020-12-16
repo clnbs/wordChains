@@ -1,11 +1,13 @@
 package wordchainsresolver
 
+// BFSWordTreeNode struct represents words tidy in a tree
 type BFSWordTreeNode struct {
 	Word            string
 	PreviousElement *BFSWordTreeNode
 	NextElements    []*BFSWordTreeNode
 }
 
+// NewBFSWordTreeNode is BFSWordTreeNode constructor
 func NewBFSWordTreeNode(word string, previous *BFSWordTreeNode) *BFSWordTreeNode {
 	newNode := &BFSWordTreeNode{
 		Word:            word,
@@ -18,6 +20,7 @@ func NewBFSWordTreeNode(word string, previous *BFSWordTreeNode) *BFSWordTreeNode
 	return newNode
 }
 
+//Depth return a node's depth in the tree
 func (node *BFSWordTreeNode) Depth() int {
 	depth := 1
 	tmpNode := node
@@ -28,6 +31,8 @@ func (node *BFSWordTreeNode) Depth() int {
 	return depth
 }
 
+// GetSolution return the word chain from the current node
+// by looking at its parent node until it reach the root node
 func (node *BFSWordTreeNode) GetSolution() []string {
 	var wordChains []string
 	tmpNode := node
@@ -40,10 +45,12 @@ func (node *BFSWordTreeNode) GetSolution() []string {
 	return flipStringSlice(wordChains)
 }
 
+// BFSQueue is a BFSWordTreeNode FIFO queue
 type BFSQueue struct {
 	words []*BFSWordTreeNode
 }
 
+// Pop return the first element of the queue
 func (bfsQ *BFSQueue) Pop() *BFSWordTreeNode {
 	if len(bfsQ.words) == 0 {
 		return nil
@@ -53,14 +60,18 @@ func (bfsQ *BFSQueue) Pop() *BFSWordTreeNode {
 	return element
 }
 
+// Add adds a element at the back of the queue
 func (bfsQ *BFSQueue) Add(element *BFSWordTreeNode) {
 	bfsQ.words = append(bfsQ.words, element)
 }
 
+// Len return queue's length
 func (bfsQ *BFSQueue) Len() int {
 	return len(bfsQ.words)
 }
 
+// BFSSolver is a implementation of Solver interface in order to find
+//// word chains with a BFS algorithm
 type BFSSolver struct {
 	wordsList         []string
 	usefulWords       []string
@@ -73,6 +84,7 @@ type BFSSolver struct {
 	discovered        map[*BFSWordTreeNode]interface{}
 }
 
+// NewBFSSolver is a simple BFSSolver constructor
 func NewBFSSolver() *BFSSolver {
 	return &BFSSolver{
 		bestSolutionDepth: int(^uint(0) >> 1),
@@ -81,6 +93,10 @@ func NewBFSSolver() *BFSSolver {
 	}
 }
 
+// NewBFSSolverWithParams is also a BSFSolver constructor but with params
+// input : the first word of the futur word chains, the ending word of the futur word chains,
+// the word list database
+// /!\ Warning, using this constructor is unsafe and should be used in a testing purpose
 func NewBFSSolverWithParams(from, to string, wordList []string) *BFSSolver {
 	return &BFSSolver{
 		wordsList:         wordList,
@@ -94,6 +110,9 @@ func NewBFSSolverWithParams(from, to string, wordList []string) *BFSSolver {
 	}
 }
 
+// FindWordChains implements the Solver interface. The BFS solver generate word chains
+// by looking for the best solutions in a tree, breadth first. It is a complete algorithm :
+// if there is a solution, BFS will find it
 func (bfs *BFSSolver) FindWordChains(from string, to string, wordList []string) ([][]string, error) {
 	if len(from) != len(to) {
 		return nil, ErrorWordLengthDoesNotMatch
@@ -165,6 +184,7 @@ func (bfs *BFSSolver) listPossibleNextWords(word string) []string {
 	return possibleNewWords
 }
 
+// Clean delete all data stored in the current BFSSolver instance
 func (bfs *BFSSolver) Clean() {
 	bfs.wordsList = nil
 	bfs.usefulWords = nil

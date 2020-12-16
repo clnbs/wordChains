@@ -187,7 +187,7 @@ func TestBFSSolver_solveBFS(t *testing.T) {
 
 func TestBFSSolver_FindWordChains(t *testing.T) {
 	solver := NewBFSSolver()
-	factory := NewFileLoaderFactory(os.Getenv("GOPATH") + "/src/github.com/clnbs/wordChains/assets/app/wordlist.txt")
+	factory := NewFileLoaderFactory(os.Getenv("GOPATH") + "/src/github.com/clnbs/wordChains/assets/app/small_en.txt")
 	GeneralWordChainsResolverTest(solver, factory, t)
 	solver = NewBFSSolver()
 	_, err := solver.FindWordChains("dummy", "to", []string{})
