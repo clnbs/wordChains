@@ -6,7 +6,7 @@ help:
 
 .DEFAULT_GOAL := help
 
-all: greedy bfs
+all: greedy bfs astar
 
 testing: ## Start all static test for this project and create a coverage file in HTML
 	bash scripts/test.sh
@@ -16,3 +16,6 @@ greedy: ## Compile greedy implementation of word chains solver
 
 bfs: ## Compile BFS implementation of word chains solver
 	bash scripts/build.sh bfs
+
+astar: ## Compile A* implementation of word chains solver
+	bash scripts/build.sh astar
