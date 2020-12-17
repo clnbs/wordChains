@@ -66,6 +66,9 @@ func NewAStarSolver() *AStarSolver {
 // by looking for the best solutions in a tree. It is a complete algorithm :
 // if there is a solution, A* will find it
 func (a *AStarSolver) FindWordChains(from string, to string, wordList []string) ([][]string, error) {
+	if len(from) != len(to) {
+		return nil, ErrorWordLengthDoesNotMatch
+	}
 	defer a.Clean()
 	// A* initialisation, go see README.md for more information
 	goal := NewAStarNode(to, nil)
