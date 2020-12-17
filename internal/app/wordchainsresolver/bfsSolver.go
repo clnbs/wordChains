@@ -1,6 +1,6 @@
 package wordchainsresolver
 
-// BFSWordTreeNode struct represents words tidy in a tree
+// BFSWordTreeNode struct represents words tidy in a tree node
 type BFSWordTreeNode struct {
 	Word            string
 	PreviousElement *BFSWordTreeNode
@@ -22,9 +22,9 @@ func NewBFSWordTreeNode(word string, previous *BFSWordTreeNode) *BFSWordTreeNode
 
 //Depth return a node's depth in the tree
 func (node *BFSWordTreeNode) Depth() int {
-	depth := 1
+	depth := 0
 	tmpNode := node
-	for tmpNode.PreviousElement != nil {
+	for tmpNode != nil {
 		depth++
 		tmpNode = tmpNode.PreviousElement
 	}
@@ -36,12 +36,10 @@ func (node *BFSWordTreeNode) Depth() int {
 func (node *BFSWordTreeNode) GetSolution() []string {
 	var wordChains []string
 	tmpNode := node
-	wordChains = append(wordChains, tmpNode.Word)
-	for tmpNode.PreviousElement != nil {
-		tmpNode = tmpNode.PreviousElement
+	for tmpNode != nil {
 		wordChains = append(wordChains, tmpNode.Word)
+		tmpNode = tmpNode.PreviousElement
 	}
-
 	return flipStringSlice(wordChains)
 }
 
@@ -71,7 +69,7 @@ func (bfsQ *BFSQueue) Len() int {
 }
 
 // BFSSolver is a implementation of Solver interface in order to find
-//// word chains with a BFS algorithm
+// word chains with a BFS algorithm
 type BFSSolver struct {
 	wordsList         []string
 	usefulWords       []string
@@ -146,6 +144,7 @@ func (bfs *BFSSolver) solveBFS() {
 			if nodeDepth <= bfs.bestSolutionDepth {
 				bfs.bestSolutionDepth = nodeDepth
 				bfs.solutions = append(bfs.solutions, node)
+				continue
 			}
 			if nodeDepth > bfs.bestSolutionDepth {
 				return
