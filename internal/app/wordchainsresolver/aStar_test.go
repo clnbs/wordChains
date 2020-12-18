@@ -45,7 +45,7 @@ func TestAStarNode_GetSolution(t *testing.T) {
 func TestAStarSolver_FindWordChains(t *testing.T) {
 	solver := NewAStarSolver()
 	factory := NewFileLoaderFactory(os.Getenv("GOPATH") + "/src/github.com/clnbs/wordChains/assets/app/small_en.txt")
-	expectedResult := [][]string{{"cat", "cot", "dot", "dog"}}
+	expectedResult := [][]string{{"cat", "cot", "cog", "dog"}}
 	// We can not use GeneralWordChainsResolverTest for A* because it returns
 	// only one expected at each time
 
