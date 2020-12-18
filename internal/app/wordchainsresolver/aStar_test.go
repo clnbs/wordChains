@@ -38,8 +38,8 @@ func TestAStarNode_GetSolution(t *testing.T) {
 	deeperNode := NewAStarNode("n0de", node)
 
 	assert.Equal(t, expected, deeperNode.GetSolution())
-	assert.Equal(t, expected[:1], node.GetSolution())
-	assert.Equal(t, expected[0], head.GetSolution())
+	assert.Equal(t, expected[:2], node.GetSolution())
+	assert.Equal(t, expected[:1], head.GetSolution())
 }
 
 func TestAStarSolver_FindWordChains(t *testing.T) {
@@ -96,7 +96,7 @@ func TestAStarSolver_helpers(t *testing.T) {
 	assert.Equal(t, 1, len(neighbors))
 	assert.Equal(t, "cot", neighbors[0].word)
 	assert.Equal(t, head, neighbors[0].previous)
-	assert.Equal(t, 1, aStar.getScoreFromGoal(neighbors[0]))
+	assert.Equal(t, 2, aStar.getScoreFromGoal(neighbors[0]))
 }
 
 func ExampleAStarSolver_FindWordChains() {
