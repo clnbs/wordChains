@@ -10,7 +10,7 @@ import (
 
 func usage(programName string) {
 	fmt.Println("usage :\t\t", programName, "path/to/wordlist.txt word1 word2")
-	fmt.Println("example :\t", programName, "./assets/app/wordlist.txt cat dog")
+	fmt.Println("example :\t", programName, "./assets/app/small_en.txt cat dog")
 }
 
 func printSolutions(solutions [][]string) {
