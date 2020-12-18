@@ -78,7 +78,7 @@ func NewGreedySolverWithParams(from string, to string, wordList []string) *Greed
 }
 
 // FindWordChains implements the Solver interface. The greedy solver generate a word chain
-// using the greedy algorithm. It is not complete so it may not give any result
+// using the greedy algorithm. It is not complete so it may not give any expected
 func (greedy *GreedySolver) FindWordChains(from string, to string, wordList []string) ([][]string, error) {
 	if len([]rune(from)) != len([]rune(to)) {
 		return nil, ErrorWordLengthDoesNotMatch

@@ -36,8 +36,8 @@ func GeneralWordChainsResolverTest(solver Solver, factory Factory, t *testing.T)
 	result, err := wcr.Solve("cat", "dog")
 	assert.Nil(t, err)
 	assert.Equal(t, expectedResult, result)
-
 	_, err = wcr.Solve("www", "dog")
+	assert.NotNil(t, err)
 }
 
 func TestNewWordChainsResolver(t *testing.T) {
@@ -94,29 +94,87 @@ func TestExcludeStringsFromStrings(t *testing.T) {
 	assert.Equal(t, expected, result)
 }
 
+type GetScoreTestCase struct {
+	word1    string
+	word2    string
+	expected int
+}
+
 func TestGetScoreBetweenTwoWord(t *testing.T) {
-	wordsList := []string{"abc", "dbz", "hxh", "abc", "abcd", "", ""}
-	expectedResult := []int{1, 0, 3, 0, -1, -1}
-	result := make([]int, len(expectedResult))
-	result[0] = getScoreBetweenTwoWord(wordsList[0], wordsList[1])
-	result[1] = getScoreBetweenTwoWord(wordsList[0], wordsList[2])
-	result[2] = getScoreBetweenTwoWord(wordsList[0], wordsList[3])
-	result[3] = getScoreBetweenTwoWord(wordsList[1], wordsList[2])
-	result[4] = getScoreBetweenTwoWord(wordsList[0], wordsList[4])
-	result[5] = getScoreBetweenTwoWord(wordsList[5], wordsList[6])
-	assert.Equal(t, expectedResult, result)
+	testCases := []GetScoreTestCase{
+		{
+			word1:    "abc",
+			word2:    "dbz",
+			expected: 1,
+		},
+		{
+			word1:    "abc",
+			word2:    "hxh",
+			expected: 0,
+		},
+		{
+			word1:    "abc",
+			word2:    "abc",
+			expected: 3,
+		},
+		{
+			word1:    "dbz",
+			word2:    "hxh",
+			expected: 0,
+		},
+		{
+			word1:    "abc",
+			word2:    "abcd",
+			expected: -1,
+		},
+		{
+			word1:    "",
+			word2:    "",
+			expected: -1,
+		},
+	}
+	for _, test := range testCases {
+		assert.Equal(t, test.expected, getScoreBetweenTwoWord(test.word1, test.word2))
+	}
+}
+
+type IsPossibleNextWordTestCase struct {
+	word1    string
+	word2    string
+	expected bool
 }
 
 func TestIsPossibleNextWord(t *testing.T) {
-	wordsList := []string{"abc", "abd", "acb", "acd", "abcd", "", ""}
-	expectedResult := []bool{true, false, false, true, false}
-	result := make([]bool, len(expectedResult))
-	result[0] = isPossibleNextWord(wordsList[0], wordsList[1])
-	result[1] = isPossibleNextWord(wordsList[0], wordsList[2])
-	result[2] = isPossibleNextWord(wordsList[0], wordsList[4])
-	result[3] = isPossibleNextWord(wordsList[2], wordsList[3])
-	result[4] = isPossibleNextWord(wordsList[5], wordsList[6])
-	assert.Equal(t, expectedResult, result)
+	testCases := []IsPossibleNextWordTestCase{
+		{
+			word1:    "abc",
+			word2:    "abd",
+			expected: true,
+		},
+		{
+			word1:    "abc",
+			word2:    "acb",
+			expected: false,
+		},
+		{
+			word1:    "abc",
+			word2:    "abcd",
+			expected: false,
+		},
+		{
+			word1:    "acb",
+			word2:    "acd",
+			expected: true,
+		},
+		{
+			word1:    "",
+			word2:    "",
+			expected: false,
+		},
+	}
+	for _, test := range testCases {
+		assert.Equal(t, test.expected, isPossibleNextWord(test.word1, test.word2), "checking words "+test.word1+" and "+test.word2)
+	}
 }
 
 func TestGetBestSolution(t *testing.T) {

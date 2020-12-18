@@ -1,19 +1,64 @@
 package wordchainsresolver
 
 import (
+	"fmt"
 	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
+func TestNewAStarNode(t *testing.T) {
+	headWord := "head"
+	nodeWord := "node"
+	expectedEmptyNode := &AStarNode{}
+	head := NewAStarNode(headWord, nil)
+	assert.Equal(t, headWord, head.word)
+	assert.Equal(t, expectedEmptyNode.previous, head.previous)
+
+	node := NewAStarNode(nodeWord, head)
+	assert.Equal(t, nodeWord, node.word)
+	assert.Equal(t, head, node.previous)
+}
+
+func TestAStarNode_Depth(t *testing.T) {
+	head := NewAStarNode("head", nil)
+	node := NewAStarNode("node", head)
+	deeperNode := NewAStarNode("n0de", node)
+
+	assert.Equal(t, 1, head.Depth())
+	assert.Equal(t, 2, node.Depth())
+	assert.Equal(t, 3, deeperNode.Depth())
+}
+
+func TestAStarNode_GetSolution(t *testing.T) {
+	expected := []string{"head", "node", "n0de"}
+	head := NewAStarNode("head", nil)
+	node := NewAStarNode("node", head)
+	deeperNode := NewAStarNode("n0de", node)
+
+	assert.Equal(t, expected, deeperNode.GetSolution())
+	assert.Equal(t, expected[:1], node.GetSolution())
+	assert.Equal(t, expected[0], head.GetSolution())
+}
+
 func TestAStarSolver_FindWordChains(t *testing.T) {
 	solver := NewAStarSolver()
 	factory := NewFileLoaderFactory(os.Getenv("GOPATH") + "/src/github.com/clnbs/wordChains/assets/app/small_en.txt")
+	expectedResult := [][]string{{"cat", "cot", "dot", "dog"}}
+	// We can not use GeneralWordChainsResolverTest for A* because it returns
+	// only one expected at each time
 
-	GeneralWordChainsResolverTest(solver, factory, t)
+	wcr := NewWordChainsResolver(solver, factory)
+	err := wcr.LoadDB()
+	assert.Nil(t, err)
+
+	result, err := wcr.Solve("cat", "dog")
+	assert.Nil(t, err)
+	assert.Equal(t, expectedResult, result)
+
 	solver = NewAStarSolver()
-	_, err := solver.FindWordChains("dummy", "to", []string{})
+	_, err = solver.FindWordChains("dummy", "to", []string{})
 	assert.NotNil(t, err)
 }
 
@@ -52,4 +97,16 @@ func TestAStarSolver_helpers(t *testing.T) {
 	assert.Equal(t, "cot", neighbors[0].word)
 	assert.Equal(t, head, neighbors[0].previous)
 	assert.Equal(t, 1, aStar.getScoreFromGoal(neighbors[0]))
+}
+
+func ExampleAStarSolver_FindWordChains() {
+	wordsList := []string{"cat", "cot", "cog", "dog", "dot"}
+	solver := NewAStarSolver()
+	wordChain, err := solver.FindWordChains("cat", "dog", wordsList)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(wordChain)
+	// Output :
+	// [[cat cot dot dog]]
 }

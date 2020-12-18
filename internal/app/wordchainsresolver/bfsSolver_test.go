@@ -1,9 +1,10 @@
 package wordchainsresolver
 
 import (
-	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestBFSQueue_Add(t *testing.T) {
@@ -144,24 +145,40 @@ func TestBFSSolver_getUsefulWordOnly(t *testing.T) {
 	assert.Equal(t, expectedUsefulWordList, bfs.usefulWords)
 }
 
+type ListPossibleNextNextWordsTestCase struct {
+	input    string
+	expected []string
+}
+
 func TestBFSSolver_listPossibleNextWords(t *testing.T) {
 	wordList := []string{"cat", "cog", "cot", "dog", "dot"}
 	fromWord := "cat"
 	toWord := "dog"
-	expectedResults := [][]string{
-		{"cot"},
-		{"cog", "dot"},
-		{"cot", "dog"},
-		{"cot", "dog"},
+	testCases := []ListPossibleNextNextWordsTestCase{
+		{
+			input:    "cat",
+			expected: []string{"cot"},
+		},
+		{
+			input:    "cot",
+			expected: []string{"cog", "dot"},
+		},
+		{
+			input:    "cog",
+			expected: []string{"cot", "dog"},
+		},
+		{
+			input:    "dot",
+			expected: []string{"cot", "dog"},
+		},
 	}
-	result := make([][]string, len(expectedResults))
+
 	bfs := NewBFSSolverWithParams(fromWord, toWord, wordList)
 	bfs.getUsefulWordOnly()
-	result[0] = bfs.listPossibleNextWords("cat")
-	result[1] = bfs.listPossibleNextWords("cot")
-	result[2] = bfs.listPossibleNextWords("cog")
-	result[3] = bfs.listPossibleNextWords("dot")
-	assert.Equal(t, expectedResults, result)
+
+	for _, test := range testCases {
+		assert.Equal(t, test.expected, bfs.listPossibleNextWords(test.input))
+	}
 }
 
 func TestBFSSolver_solveBFS(t *testing.T) {
@@ -192,8 +209,4 @@ func TestBFSSolver_FindWordChains(t *testing.T) {
 	solver = NewBFSSolver()
 	_, err := solver.FindWordChains("dummy", "to", []string{})
 	assert.NotNil(t, err)
-}
-
-func TestBFSSolver_Clean(t *testing.T) {
-
 }
