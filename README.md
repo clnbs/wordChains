@@ -76,8 +76,12 @@ e.g :
 ./bfs.bin assets/app/small_en.txt cat dog
 ```
 
+There are three implementations : 
+ - greedy simply named `greedy`
+ - bfs simply named `bfs`
+ - A* named `astar`
+
 ## Under the hood
- 
 
 ### General methodology
 The general philosophy is to build a tree containing possible words chain. The root of the tree is the starting word and the gaol is to looking for a leaf containing the ending word. This is an example with asked chain `cat` to `dog` :
@@ -177,6 +181,7 @@ Even if the best path finding algorithm is A*, other algorithms could be used to
  - Get rid of duplicated code : 
    - In main files, usage and printing solution functions
    - In solvers, tree handling code
+ - Benchmarking for all solutions
 
 ## License
 
