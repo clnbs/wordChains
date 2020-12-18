@@ -46,6 +46,7 @@ func TestAStarSolver_FindWordChains(t *testing.T) {
 	solver := NewAStarSolver()
 	factory := NewFileLoaderFactory(os.Getenv("GOPATH") + "/src/github.com/clnbs/wordChains/assets/app/small_en.txt")
 	expectedResult := [][]string{{"cat", "cot", "cog", "dog"}}
+	otherPossibleExpected := [][]string{{"cat", "cot", "dot", "dog"}}
 	// We can not use GeneralWordChainsResolverTest for A* because it returns
 	// only one expected at each time
 
@@ -55,8 +56,15 @@ func TestAStarSolver_FindWordChains(t *testing.T) {
 
 	result, err := wcr.Solve("cat", "dog")
 	assert.Nil(t, err)
-	assert.Equal(t, expectedResult, result)
+	for index, expectedWord := range expectedResult[0] {
+		if expectedWord != result[0][index] && otherPossibleExpected[0][index] != result[0][index] {
+			t.Fatal(
+				"built word chain is not expected. "+
+					"Wanted", expectedWord, "or", otherPossibleExpected[0][index],
+				"but got", result[0][index])
+		}
 
+	}
 	solver = NewAStarSolver()
 	_, err = solver.FindWordChains("dummy", "to", []string{})
 	assert.NotNil(t, err)
