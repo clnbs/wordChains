@@ -170,7 +170,9 @@ Even if the best path finding algorithm is A*, other algorithms could be used to
  - DFS : Similar to BFS but it looks for a solution in depth first. It is completely irrelevant in our case. 
 
 ## TODO list
- - Refactoring test code
+ - Get rid of duplicated code : 
+   - In main files, usage and printing solution functions
+   - In solvers, tree handling code
 
 ## License
 
@@ -188,5 +190,6 @@ Project Link: [https://github.com/clnbs/wordChains](https://github.com/clnbs/wor
 * [Cycloid.io](https://www.cycloid.io/)
 * [mieliestronk.com - word list](http://www.mieliestronk.com/corncob_lowercase.txt)
 * [Wikipedia - BFS](https://en.wikipedia.org/wiki/Breadth-first_search)
+* [Wikipedia - A*](https://en.wikipedia.org/wiki/A*_search_algorithm)
 * [Golang testify from stretchr](https://github.com/stretchr/testify)
 * [lorenbrichter - github.com - word list](https://github.com/lorenbrichter/Words)
