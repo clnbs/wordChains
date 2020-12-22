@@ -39,6 +39,7 @@ Implementation of Code Kata19 exercice. Link to the challenge [here](http://code
 In order to compile and run the different implementation, you will need :
  - Docker installed. You can find instructions [here](https://docs.docker.com/get-docker/)
  - Git
+ - Make 
  
 ### Installation
 1. Clone this repository in your GOPATH : 
